@@ -52,6 +52,7 @@ public class Project
 
 		try
 		{
+			@SuppressWarnings("resource")
 			BufferedReader buffReader = new BufferedReader(new FileReader(projectInfoFile));
 			
 			//read the 1-3 line of the project info file to get project's name and working space path
@@ -63,7 +64,7 @@ public class Project
 			head=Integer.parseInt(buffReader.readLine());
 			
 			// read THE OTHER line of a project info file
-			String content=buffReader.readLine();
+			String content = buffReader.readLine();
 			while( content != null )
 			{
 				/*
@@ -76,7 +77,7 @@ public class Project
 				String[] Line = content.split(" ");
 				Branch br = new Branch( Line[1] , Line[2] );
 				addBranch(br);
-				content=buffReader.readLine();
+				content = buffReader.readLine();
 			}
 		}
 		catch (Exception e)

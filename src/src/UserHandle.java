@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserHandle 
@@ -51,6 +52,7 @@ public class UserHandle
 	//user command: world .view.project
 	public static void viewAllProjecs()
 	{
+		System.out.println("Projects that are already existing are following:  ");
 		
 		File worldINI = new File("D://0storage//world.execute(me).config.group22.ini");
 
@@ -97,30 +99,80 @@ public class UserHandle
 
 	//================================================================================
 	//user command: world .open
-	public static Project openAProject(String projectName) throws FileNotFoundException
+	public static void openAProject(String projectName) throws IOException
 	{
-		Project project = new Project(projectName , null);
-		project.loadProjectInfoFromFile();
-		return project;
+		//read worldINI, check project name, change current project pointer (first line of the file)
+		File worldINI =  new File("D://0storage//world.execute(me).config.group22.ini");
+		@SuppressWarnings("resource")
+		BufferedReader buffReader = new BufferedReader(new FileReader(worldINI));
+	    ArrayList<String> lineInWorldINI = new ArrayList<String>(0);
+	    boolean existFlag = false;
+	    
+	    //read every line in the INI!
+	    String content = buffReader.readLine();
+	    while( content != null )
+	    {
+		    lineInWorldINI.add(content);
+		    if(projectName.equals(content))
+		    {
+		    	existFlag = true;
+		    }
+	    	content = buffReader.readLine();
+	    }
+	    
+	    //check project name, if it's invalid,  return.
+	    if(existFlag==false)
+	    {
+	    	System.out.println("there is no such project named " + projectName +"!");
+	    	return;
+	    }
+		
+	    //****IMPORTANT*****
+	    //set the current project pointer to the name of user insert projectName
+	    //then write this operation to the config INI
+	    lineInWorldINI.set(0 , projectName);
+	    
+	    FileOutputStream output = new FileOutputStream ( worldINI ) ; 
+	    String outString="";
+	    for(int i=0 ; i < lineInWorldINI.size() ;i++)
+	    {
+	    	outString+=lineInWorldINI.get(i)+"\n";
+	    }
+	    output.write(outString.getBytes());
+	    output.close();
+	    System.out.println("Project named \""+projectName+"\" is the current project!");
 	}
 	
 
 	//================================================================================
 	//user command: world .view.branch
-	public static void viewAllBranchesInProject(Project project)
+	public static void viewAllBranchesInProject() throws IOException
 	{
+		//load project information
+		File worldINI =  new File("D://0storage//world.execute(me).config.group22.ini");
+		BufferedReader buffReader = new BufferedReader(new FileReader(worldINI));
+	    String projectPointer = buffReader.readLine();
+		Project project = new Project(projectPointer);
+		project.loadProjectInfoFromFile();
+		
 		System.out.println("Current Project: " + project.projectName);
 		project.showAllBranches();
 	}
 
-
 	//================================================================================
 	//user command: world .view.commit
-	public static void viewAllCommitLog(Project project , String branchName) throws FileNotFoundException
+	public static void viewAllCommitLog() throws IOException
 	{
+		//load project information
+		File worldINI =  new File("D://0storage//world.execute(me).config.group22.ini");
+		BufferedReader buffReader = new BufferedReader(new FileReader(worldINI));
+	    String projectPointer = buffReader.readLine();
+		Project project = new Project(projectPointer);
+		project.loadProjectInfoFromFile();
+		
 		System.out.println("Current Project: " + project.projectName);
 		
-		Branch branch = project.getBranch(branchName);
+		Branch branch = project.getBranch(project.getBranchList()[project.getHead()].branchName);
 		System.out.println("Current Branch: " + branch.branchName);
 		
 		//if there¡®s no commit in this branch (i.e: an initial master branch)
@@ -132,12 +184,12 @@ public class UserHandle
 		
 		System.out.println("The commits in current branch are:");
 		
-		//show the newest commit for this branch
+		//Show the newest commit for this branch
 		Commit commit = new Commit(null,null,null,null);
 		commit = KeyValueSL.loadCommitInfoFromStorage(branch.getNewestCommitName() , commit);
 		System.out.println(commit.getName());
 		
-		//show the old commit for this branch
+		//Show the old commit for this branch
 		while(true)
 		{
 			//there's no more last commit!(this is the oldest one!)
@@ -174,13 +226,9 @@ public class UserHandle
 		
 		//finishing mission 2
 		project.clearWorkingSpace();
-		
 		String newestCommitName = project.getBranch(nameOfBranchYouWantTo).getNewestCommitName();
-		
 		Commit newestCommit  = KeyValueSL.rebuildTreeLikeStructure(newestCommitName);
-		
 		KeyValueSL.recoverFileToWorkingSpace(newestCommit , project.getWorkingSpacePath());
-		
 		project.saveProjectInfoToFile();
 	}
 	
@@ -190,9 +238,6 @@ public class UserHandle
 		System.out.println("please type the new working space path below; type \"cancel\" to cancel");
 		Scanner input = new Scanner(System.in);
 		String inPath = input.next();
-		
-		if(inPath.equals("cancel"))
-			return;
 	}
 	
 	

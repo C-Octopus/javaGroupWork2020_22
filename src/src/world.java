@@ -51,6 +51,7 @@ public class world
 		   {
 			   System.out.println("You're trying to launch a commit process! ¡Æ(- ¡õ -)!!!");
 			   System.out.println("Please enter the name of this commit, or you may use \\\"cancel\\\" to cancel this creating process.");
+			   @SuppressWarnings("resource")
 			   Scanner input = new Scanner(System.in);
 			   String commitName=input.next();
 			   if(commitName.equals("cancel"))
@@ -70,38 +71,27 @@ public class world
 		   
 		   if(command.equals(".view.project"))
 		   {
-			   System.out.println("Projects that are already existing are following:  ");
 			   UserHandle.viewAllProjecs();
 		   }
 		   
 		   if(command.equals(".view.branch"))
 		   {
-			   Project project =  new Project("luoxukun");
-			   
-			   project.loadProjectInfoFromFile();
-			   
-			   UserHandle.viewAllBranchesInProject(project);
+			   UserHandle.viewAllBranchesInProject();
 		   }
-		   
 		   
 		   if(command.equals(".view.commit"))
 		   {
-			   Project project =  new Project("luoxukun");
-			   
-			   project.loadProjectInfoFromFile();
-			   
-			   //UserHandle.viewAllBranchesInProject(project);
-			   UserHandle.viewAllCommitLog(project, project.getBranchList()[project.getHead()].branchName );
+			   UserHandle.viewAllCommitLog();
 		   }
 		   
 		   
 		   if(command.equals(".open"))
 		   {
-			   System.out.println("There're following projects, please select a project you wish to open");
+			   UserHandle.viewAllProjecs();
+			   System.out.println("please select a project you wish to open");
+			   System.out.println("Enter the name of a project,  or you may use \"cancel\" to cancel this creating process.");
 			   
-
-			   System.out.println("Please enter the name of a project,  or you may use \"cancel\" to cancel this creating process.");
-			   
+			   @SuppressWarnings("resource")
 			   Scanner input = new Scanner(System.in);
 			   String projectName=input.next();
 			   if(projectName.equals("cancel"))
@@ -120,7 +110,7 @@ public class world
 			   
 			   Project project =  new Project("luoxukun");
 			   project.loadProjectInfoFromFile();
-			   UserHandle.viewAllCommitLog(project, project.getBranchList()[project.getHead()].branchName );
+			   UserHandle.viewAllCommitLog();
 			   
 			   System.out.println("WARNING: if you're sure what you're doing, ");
 			   System.out.println("please enter the name of this commit you want to roll back to, or you may use \"cancel\" to cancel this creating process.");
@@ -141,7 +131,7 @@ public class world
 		   if(command.equals(".newbranch"))
 		   {
 			   System.out.println("Welcome to create branch guide!!");
-			   System.out.println("Please enter new branch's name, or you may use \"cancel\" to cancel this creating process.");
+			   System.out.println("Please enter new branch's name, or you may use \"cancel\" to cancel this process.");
 			   
 			   Scanner input = new Scanner(System.in);
 			   String branchName=input.next();
@@ -164,9 +154,8 @@ public class world
 			   
 			   Project project =  new Project("luoxukun");
 			   project.loadProjectInfoFromFile();
-			   UserHandle.viewAllBranchesInProject(project);
+			   UserHandle.viewAllBranchesInProject();
 			   
-
 			   System.out.println("Please choose a branch's name, or you may use \"cancel\" to cancel this creating process.");
 			   
 			   Scanner input = new Scanner(System.in);
