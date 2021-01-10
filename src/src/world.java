@@ -9,7 +9,7 @@ public class world
 		   //initialized
 		   UserHandle.worldInitial();
 		   
-		   String command = ".view.commit" ;
+		   String command = ".open" ;
 		   
 		   if(command.equals(".create") )
 		   {
@@ -98,8 +98,8 @@ public class world
 		   if(command.equals(".open"))
 		   {
 			   System.out.println("There're following projects, please select a project you wish to open");
+			   UserHandle.viewAllProjecs();
 			   
-
 			   System.out.println("Please enter the name of a project,  or you may use \"cancel\" to cancel this creating process.");
 			   
 			   Scanner input = new Scanner(System.in);
