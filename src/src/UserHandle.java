@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserHandle 
@@ -97,11 +98,48 @@ public class UserHandle
 
 	//================================================================================
 	//user command: world .open
-	public static Project openAProject(String projectName) throws FileNotFoundException
+	public static void openAProject(String projectName) throws IOException
 	{
 		Project project = new Project(projectName , null);
 		project.loadProjectInfoFromFile();
-		return project;
+		
+		//read worldINI, check project name, change current project pointer (first line of the file)
+		File worldINI =  new File("D://0storage//world.execute(me).config.group22.ini");
+		@SuppressWarnings("resource")
+		BufferedReader buffReader = new BufferedReader(new FileReader(worldINI));
+	    ArrayList<String> lineInWorldINI = new ArrayList<String>(0);
+	    boolean existFlag = false;
+	    
+	    //read every line in the INI!
+	    String content = buffReader.readLine();
+	    while( content != null )
+	    {
+	    	//System.out.println(buffReader.readLine());
+		    lineInWorldINI.add(content);
+		    if(projectName.equals(content))
+		    {
+		    	existFlag = true;
+		    }
+	    	content = buffReader.readLine();
+	    }
+	    
+	    //check project name, if it's invalid,  return.
+	    if(existFlag==false)
+	    {
+	    	System.out.println("there is no such project named " + projectName +"!");
+	    	return;
+	    }
+		
+	    lineInWorldINI.set(0 , projectName);
+	    
+	    FileOutputStream output = new FileOutputStream ( worldINI , true ) ; 
+	    String outString="";
+	    for(int i=0 ; i < lineInWorldINI.size() ;i++)
+	    {
+	    	outString=lineInWorldINI.get(i)+"\n";
+	    }
+	    output.write(outString.getBytes());
+	    output.close();
 	}
 	
 
