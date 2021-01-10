@@ -14,7 +14,8 @@ public class world
 		   
 		   while(true)
 		   {
-			   System.out.println("Waiting for order.....enter \"world.end to quit! \"");
+			   System.out.println("===================================================");
+			   System.out.println("Waiting for order.....enter \"world.end\" to quit! ");
 			   String command = input.next(); //".view.branch" ;
 			   
 			   if(command.equals("world.create") )
@@ -40,6 +41,7 @@ public class world
 				   }
 				   
 				   UserHandle.createProject(projectName, workingSpacePath);
+				   continue;
 			   }
 			   
 			   
@@ -56,22 +58,26 @@ public class world
 				   }
 				   
 				   UserHandle.executeCommit(commitName);
+				   continue;
 			   }
 			   
 			   
 			   if(command.equals("world.view.project"))
 			   {
 				   UserHandle.viewAllProjecs();
+				   continue;
 			   }
 			   
 			   if(command.equals("world.view.branch"))
 			   {
 				   UserHandle.viewAllBranchesInProject();
+				   continue;
 			   }
 			   
 			   if(command.equals("world.view.commit"))
 			   {
 				   UserHandle.viewAllCommitLog();
+				   continue;
 			   }
 			   
 			   
@@ -93,6 +99,7 @@ public class world
 				   
 				   //(3)
 				   UserHandle.openAProject(projectName);
+				   continue;
 			   }
 			   
 			   
@@ -113,6 +120,7 @@ public class world
 				   }
 				   
 				   UserHandle.executeRollback(commitName);
+				   continue;
 			   }
 			   
 			   if(command.equals("world.newbranch"))
@@ -128,6 +136,7 @@ public class world
 				   }
 				   
 				   UserHandle.createBranch(branchName);
+				   continue;
 			   }
 			   
 			   
@@ -146,6 +155,7 @@ public class world
 				   }
 				   
 				   UserHandle.changeCurrentBranch(branchName);
+				   continue;
 			   }
 			   
 			   if(command.equals("world.end"))

@@ -22,6 +22,7 @@ public class Project
 		branchList = new Branch[0];
 	}
 	
+	//Unused constructor.... thanks for supporting our testing for 2 weeks ~~ you can retire now
 	public Project(String projectName , String workingSpacePath)
 	{
 		this.projectName =  projectName;
